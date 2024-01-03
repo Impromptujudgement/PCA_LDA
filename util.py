@@ -85,14 +85,14 @@ def visualise_results_to_csv(test_labels, predicted_labels, csv_filename):
     error_rate = (total_errors / len(test_labels)) * 100
 
     # 输出每个类别的错误数、总的错误数和错误率
-    for i, count in enumerate(error_counts, start=1):
-        print(f"The number of errors of class {i} is {count}")
-    print(f"The number of total errors is {total_errors}")
-    print(f"The error rate is {error_rate:.2f} %")
     with open(csv_filename, 'r') as csvfile:
         csv_reader = csv.reader(csvfile)
         for row in csv_reader:
             print("\t".join(row))
+    for i, count in enumerate(error_counts, start=1):
+        print(f"The number of errors of class {i} is {count}")
+    print(f"The number of total errors is {total_errors}")
+    print(f"The error rate is {error_rate:.2f} %")
     print_full_line("*")
 
 
