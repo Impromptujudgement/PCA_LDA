@@ -15,7 +15,7 @@ def gram_schmidt(vectors):
 
 
 def lda_pure(train_images, train_labels, test_images, test_labels, orthogonal=False):
-    lda = LDA()  # 默认情况下，LDA 会使用最多 C-1 个组件，C 是类别数
+    lda = LDA(n_components=39)  # 默认情况下，LDA 会使用最多 C-1 个组件，C 是类别数
     train_lda = lda.fit_transform(train_images, train_labels)
     test_lda = lda.transform(test_images)
     if orthogonal:

@@ -17,17 +17,39 @@ def load_images(folder_path):
     return np.array(images), np.array(labels)
 
 
-def split_set(images, labels):
-    train_images = images[::2]  # 奇数编号图像作为训练集
-    train_images = train_images.astype('float32')
-    train_images /= 255.0
-    train_labels = labels[::2]
+def split_set(images, labels, num_people=40, images_per_person=10):
+    train_images = []
+    test_images = []
+    train_labels = []
+    test_labels = []
 
-    test_images = images[1::2]  # 偶数编号图像作为测试集
-    test_images = test_images.astype('float32')
-    test_images /= 255.0
-    test_labels = labels[1::2]
+    for i in range(num_people):
+        for j in range(images_per_person):
+            index = i * images_per_person + j
+            if j < images_per_person // 2:  # 取每个人前一半的图像作为训练集
+                train_images.append(images[index])
+                train_labels.append(labels[index])
+            else:  # 取每个人后一半的图像作为测试集
+                test_images.append(images[index])
+                test_labels.append(labels[index])
+
+    # 将列表转换为 NumPy 数组并归一化
+    train_images = np.array(train_images, dtype='float32') / 255.0
+    test_images = np.array(test_images, dtype='float32') / 255.0
+    train_labels = np.array(train_labels)
+    test_labels = np.array(test_labels)
+
     return train_images, train_labels, test_images, test_labels
+
+
+def classify(test_sample, train_images, train_labels):
+    distances = [euclidean_distance(test_sample, img) for img in train_images]
+    min_distance_index = np.argmin(distances)
+    return train_labels[min_distance_index]
+
+
+def euclidean_distance(a, b):
+    return np.linalg.norm(a - b)
 
 
 def calculate_predicted_labels(train_images, train_labels, test_images):
@@ -66,13 +88,3 @@ def print_full_line(char='-'):
     terminal_width = shutil.get_terminal_size().columns
     line = char * terminal_width
     print(line)
-
-
-def classify(test_sample, train_images, train_labels):
-    distances = [euclidean_distance(test_sample, img) for img in train_images]
-    min_distance_index = np.argmin(distances)
-    return train_labels[min_distance_index]
-
-
-def euclidean_distance(a, b):
-    return np.linalg.norm(a - b)
