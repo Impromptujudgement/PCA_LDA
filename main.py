@@ -13,4 +13,4 @@ if __name__ == '__main__':
     PCA_LDA(train_images, train_labels, test_images, test_labels)
     lda_pure(train_images, train_labels, test_images, test_labels)
     lda_pure(train_images, train_labels, test_images, test_labels, True)
-    # zero_LDA(train_images, train_labels, test_images, test_labels)
+    zero_LDA(train_images, train_labels, test_images, test_labels)
