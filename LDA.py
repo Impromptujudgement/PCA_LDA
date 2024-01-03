@@ -14,7 +14,7 @@ def gram_schmidt(vectors):
     return np.array(orthogonal).T
 
 
-def lda_pure(train_images, train_labels, test_images, test_labels, orthogonal=False):
+def lda_pure(train_images, train_labels, test_images, test_labels, orthogonal=False, **kwargs):
     lda = LDA(n_components=39)  # 默认情况下，LDA 会使用最多 C-1 个组件，C 是类别数
     train_lda = lda.fit_transform(train_images, train_labels)
     test_lda = lda.transform(test_images)
@@ -27,4 +27,7 @@ def lda_pure(train_images, train_labels, test_images, test_labels, orthogonal=Fa
     classifier = KNeighborsClassifier(n_neighbors=3)
     classifier.fit(train_lda, train_labels)
     predicted_labels = classifier.predict(test_lda)
-    visualise_results(test_labels, predicted_labels)
+
+    # 使用kwargs来获取csv_filename
+    csv_filename = kwargs.get('csv_filename', './table/lda_pure.csv')
+    visualise_results_to_csv(test_labels, predicted_labels, csv_filename=csv_filename)

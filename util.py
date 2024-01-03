@@ -2,6 +2,7 @@ import os
 from PIL import Image
 import shutil
 import numpy as np
+import csv
 
 
 def load_images(folder_path):
@@ -63,16 +64,23 @@ def calculate_predicted_labels(train_images, train_labels, test_images):
     return predicted_labels
 
 
-def visualise_results(test_labels, predicted_labels):
+def visualise_results_to_csv(test_labels, predicted_labels, csv_filename):
     error_counts = [0] * len(np.unique(test_labels))
-    # 输出已知类号、样本编号和识别结果
-    print("已知类号\t样本编号\t识别结果(类号)")
-    for i, (true_label, predicted_label) in enumerate(zip(test_labels, predicted_labels), start=1):
-        error_status = "(error)" if true_label != predicted_label else ""
-        print(f"{true_label}\t{i}\t{predicted_label} {error_status}")
-        if true_label != predicted_label:
-            error_counts[true_label - 1] += 1
-    # 计算总的错误数和错误率
+
+    with open(csv_filename, 'w', newline='') as csvfile:
+        csv_writer = csv.writer(csvfile)
+
+        # 写入表头
+        csv_writer.writerow(["已知类号", "样本编号", "识别结果(类号)"])
+
+        for i, (true_label, predicted_label) in enumerate(zip(test_labels, predicted_labels), start=1):
+            error_status = "(error)" if true_label != predicted_label else ""
+            # 写入数据行
+            csv_writer.writerow([true_label, i, f"{predicted_label} {error_status}"])
+
+            if true_label != predicted_label:
+                error_counts[true_label - 1] += 1
+
     total_errors = sum(error_counts)
     error_rate = (total_errors / len(test_labels)) * 100
 
@@ -81,7 +89,11 @@ def visualise_results(test_labels, predicted_labels):
         print(f"The number of errors of class {i} is {count}")
     print(f"The number of total errors is {total_errors}")
     print(f"The error rate is {error_rate:.2f} %")
-    print_full_line('*')
+    with open(csv_filename, 'r') as csvfile:
+        csv_reader = csv.reader(csvfile)
+        for row in csv_reader:
+            print("\t".join(row))
+    print_full_line("*")
 
 
 def print_full_line(char='-'):

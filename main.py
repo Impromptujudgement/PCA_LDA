@@ -12,5 +12,5 @@ if __name__ == '__main__':
     reconstruct(train_images)
     PCA_LDA(train_images, train_labels, test_images, test_labels)
     lda_pure(train_images, train_labels, test_images, test_labels)
-    lda_pure(train_images, train_labels, test_images, test_labels, True)
+    lda_pure(train_images, train_labels, test_images, test_labels, True, csv_filename="./table/lda_pure_orthogonal.csv")
     zero_LDA(train_images, train_labels, test_images, test_labels)

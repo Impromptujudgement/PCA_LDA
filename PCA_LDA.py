@@ -17,4 +17,4 @@ def PCA_LDA(train_images, train_labels, test_images, test_labels):
     train_images_lda = lda.fit_transform(train_images_pca, train_labels)
     test_images_lda = lda.transform(test_images_pca)
     predicated_PCA_LDA = calculate_predicted_labels(train_images_lda, train_labels, test_images_lda)
-    visualise_results(test_labels, predicated_PCA_LDA)
+    visualise_results_to_csv(test_labels, predicated_PCA_LDA, "./table/PCA_LDA.csv")

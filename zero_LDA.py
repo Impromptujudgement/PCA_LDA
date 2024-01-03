@@ -19,4 +19,4 @@ def zero_LDA(train_images, train_labels, test_images, test_labels):
     classifier = KNeighborsClassifier(n_neighbors=3)
     classifier.fit(train_lda, train_labels)
     predicted_labels = classifier.predict(test_lda)
-    visualise_results(test_labels, predicted_labels)
+    visualise_results_to_csv(test_labels, predicted_labels, "./table/zero_LDA.csv")
